@@ -1,0 +1,207 @@
+\documentclass{Gharaei}
+\usepackage{wrapfig}
+\title{Vorlage UML, Betriebssysteme und Rechnernetze}
+\author{Paul Kruse}
+\date{03.03.2020}
+
+\begin{document}
+\maketitle
+\newpage
+\thispagestyle{empty}
+\tableofcontents
+\setcounter{page}{1}
+\newpage
+\section{P - Assignments}
+\thispagestyle{myheadings}
+\subsection{P1}
+\subsubsection{P1A}
+\begin{figure}[H]
+\centering
+\includegraphics[height=\textheight/2 ,keepaspectratio]{screenshotSLPolicy_kerlenFacility.JPG}
+\caption{slpolicy for kernel facility}
+\end{figure}
+\subsubsection{P1B}
+The command \texttt{slpolicy.exe -f kernel} shows the value stored in the \texttt{Kernel} facility. The Kernel facility stores values describing the amount of memory that can be used and the limits of the central processing unit. % 33 Words max:60
+\subsubsection{P1C}
+Policies are defined as criteria, rules or limits to shape or organize the operating system functionality.
+\subsection{P3}
+Kernel address space (KAS) encapsulates executives and device drivers making them portable to the heterogen hardware architectures WindowsOS runs on. Thus it is sensible for device drivers being in KAS. The hardware abstraction layer (HAL) is in the kernel mode too. As device drivers call the corresponding DLL (Hal.dll) to access the hardware, performance and efficiency are other reasons for device drivers being in KAS reducing context switches. 
+%Device Drivers have access to the Kernel Adress Space: Why? 
+% From Windows Internals p. 
+%40-70 Words
+\newpage
+\section{A Assignments}
+\subsection{A-MMG}
+On the illustration there are facts about the address bus size which enables the  WinTel to ommit paging in its memory model thus being able to provide a flat memory model. According to the whitepaper mentioned in the lecture a flat memory is not further differentiated and has sequenced adresses. The illustration poses the question why there is the possibility to have a $64bit$ address bus but in general only a $48bit$ adress bus is implemented. It also hints at the answer. A $64bit$ adress bus results in $2^{64}$ addressabel bytes which equals 16 exabytes in storage. This is a hardly ever necessary amount of storagen. %106 words
+%Source:
+\subsection{A-PE}
+\par
+\begin{wrapfigure}{r}{0pt} 
+    
+    \includegraphics[height=\textheight/2]{screenshotsFA/A-PE.JPG} 
+    \caption{Process Explorer: Memory}
+ 
+\end{wrapfigure}
+System: The system is in my interpretation a placeholder for the system memory. The system memory consists of two seperate pools: the paged pool and the unpaged pool whereas the unpaged pool's virtual addresses directly refer to physical memory.
+Physical memory: The memory that is directly accessible by the CPU. The access is random. Thus it is a kind of RAM.
+Commit: A page can have several states: \textit{free}, \textit{reserverd}, \textit{committed} and \textit{shareable}.For a page to be committed means that it is assigned to one specific process and can not be shared.
+Paging: process of moving pages between physical memory and any other storage device.
+\subsection{A-SO}
+Inbetween the virtual adress space and the physical RAM the illustration depicts two section objects. A section object enables the sharing of memory space between processes. It also provides views: a part of the section that is visible to a process. Providing a new view for a process is called mapping. Section object $O_{j}$ is used by Thread$_{z1}$ of Process$_{z}$ and Thread$_{x1}$ of Process$_{x}$. The data changed in the page file is not permanently altered. Its original state is replecated as soon as the section object it backed is destroyed. $O_q$ is a page-file-backed section object. It is used by Thread$_{zj}$ of Process$_{z}$ and Thread$_{x1}$ of Process$_{x}$. The data written to that section object can be stored permanently in the backing file. Of interest ist, that Thread$_{x1}$ has handles to both section object $O_j$ and $O_q$. Under the condition that at least some of the views offered by $O_j$ is common among both processes, Thread$_{x1}$ is able to extract temporarily altered data from the page-file-backed section object $O_j$ and write it via section object $O_q$ to permanent memory. 
+\section{Final Assignment}
+\subsection{Phase I}
+\subsubsection{Using Process Monitor, Event Properties, Filters}
+The process monitor monitors classes of operation:
+
+     file system,
+    registry and
+     process.
+\begin{figure}[H]
+    \centering
+    \includegraphics[]{screenshotsFA/UsingProcessMonitor.JPG}
+    \caption{Operations for Process Monitor}
+\end{figure}
+
+I expect the Process Monitor to enable me to get a more detailed perspective of what is happening on a lower level of the system while I operate on a high application level.
+\begin{figure}[H]
+    \centering
+    \includegraphics[]{screenshotsFA/EventProperties.JPG}
+    \caption{Event Properties}
+\end{figure}
+
+The event properties can be used to categorize the events. If it is known which properties an event of interest has, it is possible to reduce the number of shown events by applying a filter for those properties.
+An event can have the following properties: sequence number, issuing thread, event class and operation, result, timestamp and ressource path.
+
+
+
+
+%TOD Screenshots
+\subsubsection{Filtering}
+\begin{figure}[H]
+    \centering
+    \includegraphics[]{screenshotsFA/FAFilteringIntro.JPG}
+    \caption[]{Filtering}
+\end{figure}
+The filtering feature for me appears to be useful if I know specific properties of the events I want to monitor. I suppose it will yield a more concise view of the processes that are of interest to me for a specific task.
+Filtering can be nondestructive oder destructive. The former only influences the data shown by PM, the latter deletes data that is excluded by the filtering mode.
+\subsubsection{Start capturing events}
+If an instance of notepad is running terminate it. Use Task-Manager to verify no notepad-process is running
+After clearing the display and terminating all notepad processes a new filter is added according to the specifications in the instructions. Figure 5 shows the configuration of the filter. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=\textheight/2]{screenshotsFA/FinAssFilterNotepad.JPG}
+\caption{Process Monitor Filter: filter for Process Name begins with notepad}
+\end{figure}
+Returning to the processes monitor no events appear. All events are being excluded by the applied filter. This information can also be optained from the status bar. 
+After starting the notepad application the status bar shows an increasing number of events. The number of shown events rises rapidly after starting the notepad application but remains almost constant after a short period of time. The number of total events rises steadily and keeps rising while the process monitor is being observed. I assume this is due to the fact that there are multiple other processes running which raise events themselves but which are exlcuded by our defined filter. The corresponding screenshot is shown in Figure 7.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{screenshotsFA/FinAssNotepadsProgBar.JPG}
+\caption{Captured events and status bar}
+\end{figure}
+The screen is cleared.
+The next action of interest is, what happens when the mouse cursor enters the notepad window.
+Above action is executed while the events are being captured. Figure 8 shows the corresponding events in a screenshot. The last four events have the operation type Thread Exit. Their detail information is SUCCESS.  %Guess why?
+
+\begin{figure}[H]
+    \centering
+\includegraphics[width=\textwidth]{screenshotsFA/FinAssNotepadEntering.JPG}
+\caption{Notepadrelated events after entering notepad}
+\end{figure}
+
+Again the screen is cleared. 
+Now the letter 'H' is typed into the Notepad. The screenshot capturing the related events is shown in Figure 8. The operation types that appear are RegSetInfoKey, RegQueryKey, RegOpenKey, RegCloseKey.
+So what happens when a keyboard key is typed? My idea ist that the pressing of the key sends an interrupt which is routed to some kernel address space function or to a device driver. This sets the information for the key that was pressed into a register (RegSetInfoKey). After that a query for that key is executed (RegQueryKey). The result is opened and delivered to the notepad application (RegOpenKey). Than the Key is closed (RegCloseKey. The result is that the encoded character "H" is shown in the notepad window. 
+\begin{figure}
+    \centering
+\includegraphics[width =  \textwidth]{screenshotsFA/FinAssNotepadTypingH.JPG}
+\caption{Events after Typing 'H' in the notepad}
+\end{figure}
+Now the so edited file should be saved by first selecting the file option and secondly select save as with the name "Text2.exe"
+My observartions  for the first step is that there are events listed with the operations \texttt{RegOpenKey} and \texttt{RegCloseKey}. Their path is \texttt{HKCU\textbackslash Control Panel\textbackslash Desktop} or \texttt{HKCU\textbackslash Software\textbackslash Policies \textbackslash Microsoft \textbackslash Control Panel\textbackslash Desktop}
+The second step yields the following obseravations:
+ There appear some events which are of the Operation \texttt{RegQueryKey}. Their Detail field names what they are querying for, e.g Name which in my opinion is the Name under which the file should be saved. 
+In addition to the aforementioned \texttt{RegOpenKey} and \texttt{RegCloseKey} there are now events with the \texttt{ReadFile}, the \texttt{CloseFile} and the \texttt{IRP\_MJ\_CLOSE} Operation with a path property which names the User folder of the currently active user. These paths seem to lead to the directory where the file is stored. In Addition there appears an event with the operation \texttt{ThreadExit} I interpret that as the termination of a set sequence of events terminating the thread from which they where raised.
+Now the notepad application is closed. Observing the PM leads to the observations that 
+on closing their appear events with  \texttt{CloseFile} and the \texttt{IRP\_MJ\_CLOSE}  operations.
+\subsection{Phase II}
+For the second phase of the experiment 
+ a second filter with \texttt{Operation begins with load} is added and applied. A screenshot of the system details is included in Figure 10.- A screenshot displaying the added filter is shown in Figure 11.
+
+ \begin{figure}[H]
+    \centering
+    \includegraphics[]{screenshotsFA/SystemDetails.JPG}
+\caption{System Details}
+\end{figure}
+Now the same steps as in Phase I are taken.
+After quitting all notepad processes, the screen is cleared. Now the notepad application is started. 
+\begin{figure} [H]
+    \centering
+    \includegraphics[]{screenshotsFA/PMFilterLoad.JPG}
+    \caption{Load Filter added}
+\end{figure}
+I observe the following: The number of total events in the status bar rises continually. The number of shown events remains exactly the same. This cotrasts the observations with just one filter applied, where from time to time an event with notepad in the beginning of its name property is raised. All shown events have the same operation: \texttt{Load Image} The number of shown events remains exactly the same because the additional filter prevents any events from beeing shown that do not include "load". My guess is that all load operations are executed in the starting process of the notepad application. Once fully loaded no events with that property are raised. The status bar and the four last events can be seen in Figure 11.
+\begin{figure}[H]
+    \centering
+\includegraphics[width=\textwidth]{screenshotsFA/PMFilterLoadSection11.JPG}
+\caption{Process Monitor for Load filter}
+\end{figure}
+After clearing the screen the notepad application is entered. Nothing happens. No further events are shown in the process monitor. Figure 12 depicts that there no events shown. One possible explanation could be, that the application is completely loaded and therefore no load events appear. 
+\begin{figure}[H]
+    \centering
+\includegraphics[width=\textwidth]{screenshotsFA/PMFILTERLOADEnteringNotepad.JPG}
+\caption{Events after entering the notepad window}
+\end{figure}
+As in Phase I the character 'H' is typed into the notepad application. 
+Only one additional event appears in the PM. Its operation property is \texttt{Load Image}. One possible interpretation is that it loads the image of the character "H" from the memory. That could be indicated by the Detail property which states an Image Base at a memory address.
+This event can be seen in Figure 13.
+\begin{figure}[H]
+    \centering
+\includegraphics[width=\textwidth]{screenshotsFA/PMFilterLoadTypingH.JPG}
+        \caption{Events after typing 'H'}
+\end{figure}
+
+Now the file should be saved, using the save as command. 
+Selecting \texttt{file} does not raise any other relevant events while 
+selecting \texttt{save as} raises 78 events. They all have the same operation property: \texttt{Load Image}. They differ in their Path property. Each of them accesses a different DLL.
+I think these events are raised by loading of the interface for the dialog to save the file.
+Now the file is saved under \texttt{test2.exe}. This raises three more events. They access the DLLs: \texttt{sfc.dll} and \texttt{sfc\_os.dll}. These DLLs seem to be responsible for writing to the memory and thus storing the data.
+Closing the application yields no further events, that pass through the applied filters.
+
+\subsection{Phase III}
+The Process Explorer (PrEx)
+Customize the PE for the Columns:  PID, Start time (in Process Performance), Page Faults (in Process Memory), Threads(in Process Performance), Paged Pool(in Process Memory), Nonpaged Pool(in Process Memory)
+\subsection*{Screenshot PrEx Parent processes Notepad}
+%up to which parent level? Root Level?
+\begin{figure}
+    \centering
+        \includegraphics[]{screenshotsFA/FinalPhase3highlighted.JPG}
+        \caption{Process Explorer: notepad process \& parent process}
+\end{figure}
+
+    
+\begin{tabular}{l l p{14cm}}
+    Image: & &The image loader accesses this memory when a process is initialized,Memory that is categorized as Image memory normally contains executable files the image loader loads during the initialization  of a process.\\
+     MappedFile: & &  A mapped file is shareable and normally represents an actual file in cotras to a page file. Mapped files are used to store application data. \\
+     Shareable: & & Memory that is shared between processes. Similar to section objects that are not commited but shareable. \\
+     Heap:  & & Heap memory is private. The user mode heap manager manages the corresponding memory units. It is used for application data.\\
+     Managed Heap:& & Is in functionality similar to the Heap. The difference is that it is used by the .NET garbage collector.\\
+     Stack:& & Memory that is used to store function parameters and local variables. \\ 
+     Private Data:& &Data that can not be shared with other processes. Belongs to an application. \\
+     Page Table: & &describes the virtual address space of a process \\
+     Unusable:& &  Memory that is not in use but is not accessible due to the granularity of memory allocation. This corresponds to the cluster size of the file system which. The default cluster size on a disk is 4 kB. Its size column tells the amount of memory that is unusable. \\
+     Free:& &  Memory in the process address space that is not yet allocated. The size column stats the amount of unallocated memory.
+
+\end{tabular}
+  
+\begin{wrapfigure}[29]{r}{9cm}
+    
+    \includegraphics[height=0.75\textheight]{screenshotsFA/FinalPhase3VMMAP.JPG}
+    \caption{Screenshot of VMMAP}
+\end{wrapfigure}
+\newpage
+
+\section {Erklärung}
+Hiermit versichere ich, dass ich nicht Teile einer fremden Arbeit, insbesondere solche aus dem Internet bzw. von hier nicht angegebenen Kommilitonen oder ehemaligen Teilnehmern an der betroffenen Lehrveranstaltung, zur Bewertung einreiche. Ebenso versichere ich, dass die Arbeit nicht, auch nicht auszugsweise, bereits für eine andere Prüfung angefertigt wurde. Ich habe verstanden, dass es zulässig ist, dass ich die Arbeit unter Heranziehung relevanter Quellen erstellen/erstelle. Wikipedia ist jedoch keine relevante Quelle. Alle wörtlich oder sinngemäß den Arbeiten anderer entnommenen Stellen habe ich unter Angabe der Quellen kenntlich gemacht. Dies gilt ebenso für Zeichnungen, bildliche Darstellungen, Skizzen, Tabellen und dergleichen.  Mir ist bewusst, dass wahrheitswidrige Angaben als Täuschungsversuch behandelt werden und dass bei einem Täuschungsverdacht sämtliche Verfahren der Plagiatserkennung angewandt werden können.
+\end{document}
