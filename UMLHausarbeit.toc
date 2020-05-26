@@ -1,1 +1,6 @@
-\contentsline {section}{\numberline {1}Erkl\IeC {\"a}rung}{2}{section.2}% 
+\contentsline {section}{\numberline {1}1st Assignment}{2}{section.2}% 
+\contentsline {section}{\numberline {2}2nd Assignment}{3}{section.3}% 
+\contentsline {subsection}{\numberline {2.1}UseCase Land degradation}{3}{subsection.4}% 
+\contentsline {section}{\numberline {3}3rd Assignment}{6}{section.7}% 
+\contentsline {section}{\numberline {4}4th Assignment}{6}{section.9}% 
+\contentsline {section}{\numberline {5}Erkl\IeC {\"a}rung}{6}{section.10}% 
